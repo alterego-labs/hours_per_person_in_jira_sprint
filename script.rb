@@ -20,8 +20,25 @@ class HttpRequester
     make_http_request
   end
 
-  def get_paginated_json_response
-    
+  def get_paginated_json_response(values_key)
+    responses = do_paginated_json_response(0, [])
+    responses.compact.reduce({'values' => []}) do |hash, response|
+      hash['values'] += response.fetch(values_key, [])
+      hash
+    end
+  end
+
+  def do_paginated_json_response(offset, responses)
+    response = make_http_request(offset)
+    max_results = response['maxResults'].to_i
+    total = response['total'].to_i
+    start_at = response['startAt'].to_i
+    responses = responses + [response]
+    if max_results + start_at >= total
+      responses
+    else
+      do_paginated_json_response(offset + 50, responses)
+    end
   end
 
   def make_http_request(start_at = 0)
@@ -80,3 +97,10 @@ SPRINT_ID = gets.strip
 abort('Unknown sprint!') unless sprints.map{ |sprint| sprint['id'] }.include?(SPRINT_ID.to_i)
 
 SPRINT_ISSUES_URL = "https://#{JIRA_DOMAIN}/rest/agile/1.0/board/#{BOARD_ID}/sprint/#{SPRINT_ID}/issue"
+
+issues_json = HttpRequester.new(SPRINT_ISSUES_URL).get_paginated_json_response('issues')
+issues = issues_json['values']
+
+subtasks = issues.select { |issue| issue['fields']['issuetype']['subtask'] == true }
+
+puts subtasks.count
