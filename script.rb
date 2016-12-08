@@ -116,7 +116,7 @@ subtasks_grouped_by_assignee = subtasks.group_by do |subtask|
 end
 
 time_in_sprint_per_person = subtasks_grouped_by_assignee.reduce({}) do |hash, (assignee, subtasks)|
-  hours_in_sprint = subtasks.reduce(0) { |sum, subtask| sum += subtask['fields']['timeestimate'].to_i }
+  hours_in_sprint = subtasks.reduce(0) { |sum, subtask| sum += subtask['fields']['timeoriginalestimate'].to_i }
   hash[assignee] = hours_in_sprint / 3600.0
   hash
 end
@@ -130,7 +130,7 @@ table.align_column(1, :right)
 puts table
 
 if subtasks_grouped_by_assignee['Unknown'].count > 0
-  unassigned_subtasks_keys = subtasks_grouped_by_assignee['Unknown'].map { |subtask| [subtask['key'], subtask['fields']['timeestimate'].to_i / 3600.0] }
+  unassigned_subtasks_keys = subtasks_grouped_by_assignee['Unknown'].map { |subtask| [subtask['key'], subtask['fields']['timeoriginalestimate'].to_i / 3600.0] }
 
   table = Terminal::Table.new
   table.title = 'List of unassigned subtasks'
