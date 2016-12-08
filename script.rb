@@ -4,6 +4,7 @@ require 'json'
 
 require 'pry-nav'
 require 'rb-readline'
+require 'terminal-table'
 
 USER_LOGIN = ENV['JIRA_USER_LOGIN']
 USER_PASSWORD = ENV['JIRA_USER_PASSWORD']
@@ -120,4 +121,24 @@ time_in_sprint_per_person = subtasks_grouped_by_assignee.reduce({}) do |hash, (a
   hash
 end
 
-puts subtasks.count
+table = Terminal::Table.new
+table.title = 'Hours per person in sprint'
+table.headings = ['Person', 'Hours']
+table.rows = Array(time_in_sprint_per_person)
+table.align_column(1, :right)
+
+puts table
+
+if subtasks_grouped_by_assignee['Unknown'].count > 0
+  unassigned_subtasks_keys = subtasks_grouped_by_assignee['Unknown'].map { |subtask| [subtask['key'], subtask['fields']['timeestimate'].to_i / 3600.0] }
+
+  table = Terminal::Table.new
+  table.title = 'List of unassigned subtasks'
+  table.headings = ['Task key', 'Estimate']
+  table.rows = unassigned_subtasks_keys
+  table.style = {width: 40}
+
+  puts ''
+  
+  puts table
+end
