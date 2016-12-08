@@ -114,4 +114,10 @@ subtasks_grouped_by_assignee = subtasks.group_by do |subtask|
   end
 end
 
+time_in_sprint_per_person = subtasks_grouped_by_assignee.reduce({}) do |hash, (assignee, subtasks)|
+  hours_in_sprint = subtasks.reduce(0) { |sum, subtask| sum += subtask['fields']['timeestimate'].to_i }
+  hash[assignee] = hours_in_sprint / 3600.0
+  hash
+end
+
 puts subtasks.count
