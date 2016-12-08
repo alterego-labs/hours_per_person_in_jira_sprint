@@ -102,7 +102,9 @@ SPRINT_ISSUES_URL = "https://#{JIRA_DOMAIN}/rest/agile/1.0/board/#{BOARD_ID}/spr
 issues_json = HttpRequester.new(SPRINT_ISSUES_URL).get_paginated_json_response('issues')
 issues = issues_json['values']
 
-subtasks = issues.select { |issue| issue['fields']['issuetype']['subtask'] == true }.compact
+subtasks = issues.select do |issue|
+  (issue['fields']['issuetype']['subtask'] == true) || (issue['fields']['subtasks'].empty?)
+end.compact
 
 subtasks_grouped_by_assignee = subtasks.group_by do |subtask|
   begin
