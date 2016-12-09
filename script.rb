@@ -37,13 +37,13 @@ puts ''
 
 puts "   Enter an ID:"
 
-BOARD_ID = gets.strip
+selected_board_id = gets.strip
 
-abort('Unknown board!') unless boards.map{ |board| board.id }.include?(BOARD_ID.to_i)
+abort('Unknown board!') unless boards.map{ |board| board.id }.include?(selected_board_id.to_i)
 
 puts ''
 
-SPRINT_LIST_URL = "https://#{JIRA_DOMAIN}/rest/agile/1.0/board/#{BOARD_ID}/sprint?state=active,future"
+SPRINT_LIST_URL = "https://#{JIRA_DOMAIN}/rest/agile/1.0/board/#{selected_board_id}/sprint?state=active,future"
 
 sprints_json = HttpRequester.new(SPRINT_LIST_URL).get_json_response
 sprints = sprints_json['values'].map { |sprint_json| Sprint.new(sprint_json) }
@@ -58,11 +58,11 @@ puts ''
 
 puts "   Enter an ID:"
 
-SPRINT_ID = gets.strip
+selected_sprint_id = gets.strip
 
-abort('Unknown sprint!') unless sprints.map{ |sprint| sprint.id }.include?(SPRINT_ID.to_i)
+abort('Unknown sprint!') unless sprints.map{ |sprint| sprint.id }.include?(selected_sprint_id.to_i)
 
-SPRINT_ISSUES_URL = "https://#{JIRA_DOMAIN}/rest/agile/1.0/board/#{BOARD_ID}/sprint/#{SPRINT_ID}/issue"
+SPRINT_ISSUES_URL = "https://#{JIRA_DOMAIN}/rest/agile/1.0/board/#{selected_board_id}/sprint/#{selected_sprint_id}/issue"
 
 issues_json = HttpRequester.new(SPRINT_ISSUES_URL).get_paginated_json_response('issues')
 issues = issues_json['values'].map { |issue_json| Issue.new(issue_json) }
@@ -72,16 +72,20 @@ subtasks = issues.select { |issue| issue.subtask? || !issue.has_subtasks? }.comp
 subtasks_grouped_by_assignee = subtasks.group_by { |subtask| subtask.assignee_name }
 
 time_in_sprint_per_person = subtasks_grouped_by_assignee.reduce([]) do |array, (assignee, subtasks)|
-  hours_in_sprint = subtasks.reduce(0) { |sum, subtask| sum += subtask.original_estimate_hours }
-  array << [assignee, hours_in_sprint]
+  original_hours= subtasks.reduce(0) { |sum, subtask| sum += subtask.original_estimate_hours }
+  spent_hours = subtasks.reduce(0) { |sum, subtask| sum += subtask.time_spent_hours }
+  remaining_hours = subtasks.reduce(0) { |sum, subtask| sum += subtask.remaining_estimate_hours }
+  array << [assignee, original_hours, spent_hours, remaining_hours]
   array
 end
 
 table = Terminal::Table.new
 table.title = 'Hours per person in sprint'
-table.headings = ['Person', 'Hours']
+table.headings = ['Person', 'Original Hours', 'Spent Hours', 'Remaining Hours']
 table.rows = time_in_sprint_per_person
 table.align_column(1, :right)
+table.align_column(2, :right)
+table.align_column(3, :right)
 
 puts table
 
