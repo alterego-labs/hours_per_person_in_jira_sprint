@@ -1,13 +1,25 @@
 ## Usage
 
-Use the following guide:
+Use the following flow:
 
-```
+```shell
 $ bundle install
 $ JIRA_USER_LOGIN='<LOGIN_OR_EMAIL>' JIRA_USER_PASSWORD='<PASSWORD>' JIRA_DOMAIN='<DOMAIN>' ruby script.rb
 ```
 
+or from version _v1.0.2_ you can use the next simplified flow:
+
+```bash
+$ cp .env.example .env
+$ vim .env # adjust ENV variables
+$ ./run.sh
+```
+
 ## Statistics calculation rules
+
+### Version _v1.0.2_
+
+* __IMPROVEMENT__: provide simplified flow to run statistics generator
 
 ### Version _v1.0.1_
 
