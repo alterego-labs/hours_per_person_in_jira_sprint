@@ -17,6 +17,11 @@ $ ./run.sh
 
 ## Statistics calculation rules
 
+### Version _v1.0.3_
+
+* __IMPROVEMENT__: code refactoring
+* __FEATURE__: show spent hours and remaining hours per person
+
 ### Version _v1.0.2_
 
 * __IMPROVEMENT__: provide simplified flow to run statistics generator
