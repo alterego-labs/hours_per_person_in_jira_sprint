@@ -89,7 +89,7 @@ table.align_column(3, :right)
 
 puts table
 
-if subtasks_grouped_by_assignee['Unknown'].count > 0
+if subtasks_grouped_by_assignee.fetch('Unknown', []).count > 0
   unassigned_subtasks_keys = subtasks_grouped_by_assignee['Unknown'].map { |subtask| [subtask.key, subtask.original_estimate_hours] }
 
   table = Terminal::Table.new
