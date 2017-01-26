@@ -69,7 +69,14 @@ puts ''
 
 puts "   Enter an ID:"
 
-selected_sprint_id = gets.strip
+selected_sprint_id = nil
+
+if cli_options.sprint_set?
+  puts cli_options.sprint
+  selected_sprint_id = cli_options.sprint
+else
+  selected_sprint_id = gets.strip
+end
 
 abort('Unknown sprint!') unless sprints.map{ |sprint| sprint.id }.include?(selected_sprint_id.to_i)
 
