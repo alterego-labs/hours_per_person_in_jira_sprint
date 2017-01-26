@@ -41,7 +41,14 @@ puts ''
 
 puts "   Enter an ID:"
 
-selected_board_id = gets.strip
+selected_board_id = nil
+
+if cli_options.board_set?
+  puts cli_options.board
+  selected_board_id = cli_options.board
+else
+  selected_board_id = gets.strip
+end
 
 abort('Unknown board!') unless boards.map{ |board| board.id }.include?(selected_board_id.to_i)
 
