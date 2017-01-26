@@ -22,7 +22,13 @@ USER_LOGIN = ENV['JIRA_USER_LOGIN']
 USER_PASSWORD = ENV['JIRA_USER_PASSWORD']
 JIRA_DOMAIN = ENV['JIRA_DOMAIN']
 
-cli_options = CLI::Parser.parse ARGV
+cli_options = begin
+                CLI::Parser.parse ARGV
+              rescue OptionParser::InvalidArgument => e
+                puts "Invalid CLI options are passed! Original exception message: #{e.message}"
+                puts "Please, run `./run.sh --help` first to see all available options."
+                exit
+              end
 
 # Choose a board
 

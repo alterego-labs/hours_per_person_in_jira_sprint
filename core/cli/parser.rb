@@ -9,12 +9,12 @@ module CLI
       opt_parser = OptionParser.new do |opts|
         opts.banner = "Usage: example.rb [options]"
 
-        opts.on("-bBOARD", "--board=BOARD", "An ID of a board") do |board|
-          args.board = board.to_i
+        opts.on("-bBOARD", "--board=BOARD", Integer, "An ID of a board") do |board|
+          args.board = board
         end
 
-        opts.on("-sSPRINT", "--sprint=SPRINT", "An ID of a sprint") do |sprint|
-          args.sprint = sprint.to_i
+        opts.on("-sSPRINT", "--sprint=SPRINT", Integer, "An ID of a sprint") do |sprint|
+          args.sprint = sprint
         end
 
         opts.on("-h", "--help", "Prints this help") do
