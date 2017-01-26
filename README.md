@@ -15,7 +15,7 @@ $ vim .env # adjust ENV variables
 $ ./run.sh
 ```
 
-### Rich CLI options
+### Rich CLI options (_since v1.1.0_)
 
 Run the following command:
 
@@ -41,7 +41,11 @@ $ ./run.sh --board=2 --sprint=147
 
 And the program won't ask you to select board and sprint! This improvement can speed up the workflow for getting the main information - a table with hours per person. Of course, using CLI options is very handy if you already know board and spring IDs.
 
-## Statistics calculation rules
+## Versions
+
+### Version _v1.1.0_
+
+* __FEATURE__: rich CLI options implementation to be able to preselect board and sprint
 
 ### Version _v1.0.3_
 
