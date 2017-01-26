@@ -16,9 +16,13 @@ require_relative './core/data/issue.rb'
 require_relative './core/data/board.rb'
 require_relative './core/data/sprint.rb'
 
+require_relative './core/cli/parser.rb'
+
 USER_LOGIN = ENV['JIRA_USER_LOGIN']
 USER_PASSWORD = ENV['JIRA_USER_PASSWORD']
 JIRA_DOMAIN = ENV['JIRA_DOMAIN']
+
+cli_options = CLI::Parser.parse ARGV
 
 # Choose a board
 
