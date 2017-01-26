@@ -15,6 +15,32 @@ $ vim .env # adjust ENV variables
 $ ./run.sh
 ```
 
+### Rich CLI options
+
+Run the following command:
+
+```bash
+$ ./run.sh --help
+```
+
+The output will be the next:
+
+```bash
+Usage: example.rb [options]
+    -b, --board=BOARD                An ID of a board
+    -s, --sprint=SPRINT              An ID of a sprint
+    -h, --help                       Prints this help
+```
+
+So, now, instead selecting board and sprint every run, you can preselect both or one of those options via the CLI options.
+For example:
+
+```bash
+$ ./run.sh --board=2 --sprint=147
+```
+
+And the program won't ask you to select board and sprint! This improvement can speed up the workflow for getting the main information - a table with hours per person. Of course, using CLI options is very handy if you already know board and spring IDs.
+
 ## Statistics calculation rules
 
 ### Version _v1.0.3_
